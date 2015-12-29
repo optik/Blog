@@ -34,5 +34,4 @@ class UpdatePostTranslationsTable extends Migration {
             $table->dropColumn('meta_description');
         });
     }
-
 }

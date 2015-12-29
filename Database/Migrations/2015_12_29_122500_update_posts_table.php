@@ -12,9 +12,10 @@ class UpdatePostsTable extends Migration {
      */
     public function up()
     {
-        Schema::table('', function(Blueprint $table)
+        Schema::table('blog__posts', function(Blueprint $table)
         {
-
+            $table->integer('author_id')->after('status')->unsigned()->nullable();
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
@@ -25,9 +26,9 @@ class UpdatePostsTable extends Migration {
      */
     public function down()
     {
-        Schema::table('', function(Blueprint $table)
+        Schema::table('blog__posts', function(Blueprint $table)
         {
-
+            $table->dropColumn('author_id');
         });
     }
 

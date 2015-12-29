@@ -8,6 +8,8 @@ use Modules\Blog\Repositories\CategoryRepository;
 use Modules\Blog\Repositories\PostRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Media\Repositories\FileRepository;
+use Modules\User\Repositories\UserRepository;
+use Modules\Core\Contracts\Authentication;
 
 class PostController extends AdminBaseController
 {
@@ -24,6 +26,14 @@ class PostController extends AdminBaseController
      */
     private $file;
     /**
+     * @var UserRepository
+     */
+    private $user;
+    /**
+     * @var Authentication
+     */
+    private $auth;
+    /**
      * @var Status
      */
     private $status;
@@ -32,6 +42,8 @@ class PostController extends AdminBaseController
         PostRepository $post,
         CategoryRepository $category,
         FileRepository $file,
+        UserRepository $user,
+        Authentication $auth,
         Status $status
     ) {
         parent::__construct();
@@ -39,6 +51,8 @@ class PostController extends AdminBaseController
         $this->post = $post;
         $this->category = $category;
         $this->file = $file;
+        $this->user = $user;
+        $this->auth = $auth;
         $this->status = $status;
     }
 
@@ -61,10 +75,12 @@ class PostController extends AdminBaseController
      */
     public function create()
     {
+        $users = $this->getAuthors();
+        $currentUser = $this->auth->check();
         $categories = $this->category->allTranslatedIn(app()->getLocale());
         $statuses = $this->status->lists();
 
-        return view('blog::admin.posts.create', compact('categories', 'statuses'));
+        return view('blog::admin.posts.create', compact('currentUser', 'users', 'categories', 'statuses'));
     }
 
     /**
@@ -90,11 +106,12 @@ class PostController extends AdminBaseController
      */
     public function edit(Post $post)
     {
+        $users = $this->getAuthors();
         $thumbnail = $this->file->findFileByZoneForEntity('thumbnail', $post);
         $categories = $this->category->allTranslatedIn(app()->getLocale());
         $statuses = $this->status->lists();
 
-        return view('blog::admin.posts.edit', compact('post', 'categories', 'thumbnail', 'statuses'));
+        return view('blog::admin.posts.edit', compact('currentUser', 'users', 'post', 'categories', 'thumbnail', 'statuses'));
     }
 
     /**
@@ -129,5 +146,17 @@ class PostController extends AdminBaseController
         flash(trans('blog::messages.post deleted'));
 
         return redirect()->route('admin.blog.post.index');
+    }
+
+    /**
+     * Get all users with blog post author permissions
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    private function getAuthors()
+    {
+        return $this->user->all()->filter(function($user) {
+            return $user->hasAccess('blog.posts.store', 'blog.posts.update');
+        });
     }
 }

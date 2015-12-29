@@ -19,7 +19,7 @@
 @section('content')
 {!! Form::open(['route' => ['admin.blog.post.store'], 'method' => 'post']) !!}
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-9">
         <div class="nav-tabs-custom">
             @include('partials.form-tab-headers', ['fields' => ['title', 'slug']])
             <div class="tab-content">
@@ -38,9 +38,26 @@
             </div>
         </div> {{-- end nav-tabs-custom --}}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <div class="box box-primary">
             <div class="box-body">
+                <div class="form-group">
+                    {!! Form::label("status", 'Post status:') !!}
+                    <select name="status" id="status" class="form-control">
+                        <?php foreach ($statuses as $id => $status): ?>
+                        <option value="{{ $id }}" {{ old('status', 0) == $id ? 'selected' : '' }}>{{ $status }}</option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    {!! Form::label("author_id", 'Author:') !!}
+                    <select name="author_id" id="author_id" class="form-control">
+                        <?php foreach ($users as $user): ?>
+                        <option value="{{ $user->id }}" {{ old('author_id', $currentUser->id) == $user->id ? 'selected' : '' }}>{{ $user->email }}</option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <?php $selected_categories = old('categories') ?>
                     {!! Form::label("categories", 'Categories:') !!}
@@ -53,14 +70,6 @@
                       </label>
                     </div>
                     <?php endforeach; ?>
-                </div>
-                <div class="form-group">
-                    {!! Form::label("status", 'Post status:') !!}
-                    <select name="status" id="status" class="form-control">
-                        <?php foreach ($statuses as $id => $status): ?>
-                        <option value="{{ $id }}" {{ old('status', 0) == $id ? 'selected' : '' }}>{{ $status }}</option>
-                        <?php endforeach; ?>
-                    </select>
                 </div>
                 <div class='form-group{{ $errors->has("tags") ? ' has-error' : '' }}'>
                    {!! Form::label("tags", 'Tags:') !!}
