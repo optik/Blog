@@ -17,6 +17,9 @@ return [
     'form' => [
         'title' => 'Title',
         'slug' => 'Slug',
+        'meta-title' => 'Meta title',
+        'meta-keywords' => 'Meta keywords',
+        'meta-description' => 'Meta description',
     ],
     'navigation' => [
         'back to index' => 'Back to posts index'
