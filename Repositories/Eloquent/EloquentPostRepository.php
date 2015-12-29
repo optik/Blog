@@ -15,7 +15,7 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
      */
     public function find($id)
     {
-        return $this->model->with('translations', 'tags')->find($id);
+        return $this->model->with('translations', 'tags', 'categories')->find($id);
     }
 
     /**
@@ -23,7 +23,7 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
      */
     public function all()
     {
-        return $this->model->with('translations', 'tags')->orderBy('created_at', 'DESC')->get();
+        return $this->model->with('translations', 'tags', 'categories')->orderBy('created_at', 'DESC')->get();
     }
 
     /**
@@ -40,6 +40,10 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
             $post->tags()->sync($data['tags']);
         }
 
+        if (isset($data['categories'])) {
+            $post->categories()->sync($data['categories']);
+        }
+
         return $post;
     }
 
@@ -54,6 +58,10 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
 
         if (isset($data['tags'])) {
             $post->tags()->sync($data['tags']);
+        }
+
+        if (isset($data['categories'])) {
+            $post->categories()->sync($data['categories']);
         }
 
         return $post;

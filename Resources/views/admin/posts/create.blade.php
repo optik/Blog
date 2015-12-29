@@ -42,12 +42,17 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="form-group">
-                    {!! Form::label("category", 'Category:') !!}
-                    <select name="category_id" id="category" class="form-control">
-                        <?php foreach ($categories as $category): ?>
-                           <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        <?php endforeach; ?>
-                    </select>
+                    <?php $selected_categories = old('categories') ?>
+                    {!! Form::label("categories", 'Categories:') !!}
+                    <?php foreach ($categories as $category): ?>
+                    <div class="checkbox">
+                      <label>
+                        <input name="categories[]" type="checkbox" value="{{ $category->id }}"
+                        {{ in_array($category->id, (array) $selected_categories, false) ? 'checked' : '' }}>
+                        {{ $category->name }}
+                      </label>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
                 <div class="form-group">
                     {!! Form::label("status", 'Post status:') !!}

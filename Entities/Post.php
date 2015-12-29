@@ -11,21 +11,26 @@ class Post extends Model
     use Translatable, MediaRelation, PresentableTrait;
 
     public $translatedAttributes = ['title', 'slug', 'content'];
-    protected $fillable = ['category_id', 'status', 'title', 'slug', 'content'];
+    protected $fillable = ['status', 'title', 'slug', 'content'];
     protected $table = 'blog__posts';
     protected $presenter = 'Modules\Blog\Presenters\PostPresenter';
     protected $casts = [
         'status' => 'int',
     ];
 
-    public function category()
-    {
-        return $this->hasOne('Modules\Blog\Entities\Category');
-    }
+    // public function category()
+    // {
+    //     return $this->hasOne('Modules\Blog\Entities\Category');
+    // }
 
     public function tags()
     {
         return $this->belongsToMany('Modules\Blog\Entities\Tag', 'blog__post_tag');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany('Modules\Blog\Entities\Category', 'blog__post_category');
     }
 
     /**
