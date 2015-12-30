@@ -16,6 +16,12 @@
     <textarea class="ckeditor" name="{{$lang}}[content]" rows="10" cols="80">
     {!! old("{$lang}.content", $oldContent) !!}
     </textarea>
+
+    <div class='form-group{{ $errors->has("$lang.excerpt") ? ' has-error' : '' }}'>
+        <?php $oldExcerpt = isset($post->translate($lang)->excerpt) ? $post->translate($lang)->excerpt : ''; ?>
+        {!! Form::label("{$lang}[excerpt]", trans('blog::post.form.excerpt')) !!}
+        <textarea class="form-control" name="{{$lang}}[excerpt]" rows="4" cols="80">{!! old("{$lang}.excerpt", $oldExcerpt) !!}</textarea>
+    </div>
 </div>
 
 <div class="box-group" id="accordion">

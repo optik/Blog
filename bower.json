@@ -1,0 +1,6 @@
+{
+  "name": "Blog Module",
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
+  }
+}

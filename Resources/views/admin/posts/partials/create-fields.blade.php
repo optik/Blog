@@ -13,6 +13,11 @@
     <textarea class="ckeditor" name="{{$lang}}[content]" rows="10" cols="80">
         {!! old("{$lang}.content") !!}
     </textarea>
+
+    <div class='form-group{{ $errors->has("$lang.excerpt") ? ' has-error' : '' }}'>
+        {!! Form::label("{$lang}[excerpt]", trans('blog::post.form.excerpt')) !!}
+        <textarea class="form-control" name="{{$lang}}[excerpt]" rows="4" cols="80">{!! old("{$lang}.excerpt") !!}</textarea>
+    </div>
 </div>
 
 <div class="box-group" id="accordion">

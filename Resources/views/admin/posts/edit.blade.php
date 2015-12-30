@@ -3,6 +3,7 @@
 @section('styles')
 {!! Theme::script('js/vendor/ckeditor/ckeditor.js') !!}
 <link href="{{{ Module::asset('blog:css/selectize.css') }}}" rel="stylesheet" type="text/css" />
+<link href="{{{ Module::asset('blog:vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css') }}}" rel="stylesheet" type="text/css" />
 @stop
 
 @section('content-header')
@@ -43,7 +44,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="form-group">
-                    {!! Form::label("status", 'Post status:') !!}
+                    {!! Form::label("status", 'Post status') !!}
                     <select name="status" id="status" class="form-control">
                         <?php foreach ($statuses as $id => $status): ?>
                         <option value="{{ $id }}" {{ old('status', $post->status) == $id ? 'selected' : '' }}>
@@ -53,7 +54,18 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    {!! Form::label("author_id", 'Author:') !!}
+                    {!! Form::label("published_on", trans('blog::post.form.published-on')) !!}
+                    {!! Form::hidden("published_on", old("published_on", $post->published_on)) !!}
+                    <div class='input-group date' id='published_on_picker'>
+                        <input type='text' class="form-control" id='published_on_picker_input' placeholder="{{ trans('blog::post.form.published-on') }}">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    {!! $errors->first("published_on", '<span class="help-block">:message</span>') !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::label("author_id", 'Author') !!}
                     <select name="author_id" id="author_id" class="form-control">
                         <?php foreach ($users as $user): ?>
                         <option value="{{ $user->id }}" {{ old('author_id', $post->author_id) == $user->id ? 'selected' : '' }}>{{ $user->email }}</option>
@@ -62,19 +74,21 @@
                 </div>
                 <div class="form-group">
                     <?php $selected_categories = old('categories', $post->categories->lists('id')->all()) ?>
-                    {!! Form::label("categories", 'Categories:') !!}
-                    <?php foreach ($categories as $category): ?>
-                    <div class="checkbox">
-                      <label>
-                        <input name="categories[]" type="checkbox" value="{{ $category->id }}"
-                        {{ in_array($category->id, (array)$selected_categories, false) ? 'checked' : '' }}>
-                        {{ $category->name }}
-                      </label>
+                    {!! Form::label("categories", 'Categories') !!}
+                    <div class="checkbox-group">
+                        <?php foreach ($categories as $category): ?>
+                        <div class="checkbox">
+                          <label>
+                            <input name="categories[]" type="checkbox" value="{{ $category->id }}"
+                            {{ in_array($category->id, (array)$selected_categories, false) ? 'checked' : '' }}>
+                            {{ $category->name }}
+                          </label>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
                 <div class='form-group{{ $errors->has("tags") ? ' has-error' : '' }}'>
-                    {!! Form::label("tags", 'Tags:') !!}
+                    {!! Form::label("tags", 'Tags') !!}
                     <select name="tags[]" id="tags" class="input-tags" multiple>
                         <?php foreach ($post->tags()->get() as $tag): ?>
                             <?php $tagName = $tag->hasTranslation(locale()) === true ? $tag->translate(locale())->name : 'Not translated';  ?>
@@ -109,6 +123,8 @@
 @section('scripts')
 <script src="{{ Module::asset('blog:js/selectize.min.js') }}" type="text/javascript"></script>
 <script src="{{ Module::asset('blog:js/MySelectize.js') }}" type="text/javascript"></script>
+<script src="{{ Module::asset('blog:vendor/moment/min/moment-with-locales.min.js') }}" type="text/javascript"></script>
+<script src="{{ Module::asset('blog:vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
     $(function() {
         //CKEDITOR.replaceAll(function( textarea, config ) {
@@ -116,6 +132,12 @@
 //            config.language = '<?= App::getLocale() ?>';
 //        } );
     });
+    function updatePublishedOn() {
+        var publishedOn = $('#published_on_picker').data('DateTimePicker').date();
+        $('#published_on').val(publishedOn.toISOString());
+        debugger;
+    }
+
     $( document ).ready(function() {
         $(document).keypressAction({
             actions: [
@@ -128,6 +150,13 @@
             'createUri' : '<?= route('api.tag.store') ?>',
             'token': '<?= csrf_token() ?>'
         });
+
+        var publishedOn = moment.utc($('#published_on').val());
+        $('#published_on_picker').datetimepicker({
+            defaultDate: publishedOn.toDate(),
+            locale: '<?= App::getLocale() ?>'
+        }).on('dp.change', updatePublishedOn);
     });
+    $(document).on('submit', 'form', updatePublishedOn);
 </script>
 @stop

@@ -17,6 +17,8 @@ return [
     'form' => [
         'title' => 'Title',
         'slug' => 'Slug',
+        'excerpt' => 'Excerpt',
+        'published-on' => 'Publish date',
         'meta-title' => 'Meta title',
         'meta-keywords' => 'Meta keywords',
         'meta-description' => 'Meta description',
