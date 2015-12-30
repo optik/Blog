@@ -12,10 +12,12 @@
        {!! $errors->first("$lang.slug", '<span class="help-block">:message</span>') !!}
     </div>
 
-    <?php $oldContent = isset($post->translate($lang)->content) ? $post->translate($lang)->content : ''; ?>
-    <textarea class="ckeditor" name="{{$lang}}[content]" rows="10" cols="80">
-    {!! old("{$lang}.content", $oldContent) !!}
-    </textarea>
+    <div class="form-group">
+        <?php $oldContent = isset($post->translate($lang)->content) ? $post->translate($lang)->content : ''; ?>
+        <textarea class="ckeditor" name="{{$lang}}[content]" rows="10" cols="80">
+        {!! old("{$lang}.content", $oldContent) !!}
+        </textarea>
+    </div>
 
     <div class='form-group{{ $errors->has("$lang.excerpt") ? ' has-error' : '' }}'>
         <?php $oldExcerpt = isset($post->translate($lang)->excerpt) ? $post->translate($lang)->excerpt : ''; ?>

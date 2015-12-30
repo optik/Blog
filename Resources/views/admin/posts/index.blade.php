@@ -30,8 +30,10 @@
                         <tr>
                             <th>Id</th>
                             <th>{{ trans('blog::post.table.status') }}</th>
+                            <th>{{ trans('blog::post.table.published-on') }}</th>
                             <th>{{ trans('blog::post.table.title') }}</th>
                             <th>{{ trans('blog::post.table.slug') }}</th>
+                            <th>{{ trans('blog::post.table.author') }}</th>
                             <th>{{ trans('core::core.table.created at') }}</th>
                             <th data-sortable="false">{{ trans('core::core.table.actions') }}</th>
                         </tr>
@@ -51,6 +53,11 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <a class="published_on" href="{{ route('admin.blog.post.edit', [$post->id]) }}">
+                                        {{ $post->published_on }}
+                                    </a>
+                                </td>
+                                <td>
                                     <a href="{{ route('admin.blog.post.edit', [$post->id]) }}">
                                         {{ $post->title }}
                                     </a>
@@ -59,6 +66,13 @@
                                     <a href="{{ route('admin.blog.post.edit', [$post->id]) }}">
                                         {{ $post->slug }}
                                     </a>
+                                </td>
+                                <td>
+                                    @if($post->author)
+                                    <a href="{{ route('admin.blog.post.edit', [$post->id]) }}">
+                                        {{ $post->author->email }}
+                                    </a>
+                                    @endif
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.blog.post.edit', [$post->id]) }}">
@@ -79,8 +93,10 @@
                         <tr>
                             <th>Id</th>
                             <th>{{ trans('blog::post.table.status') }}</th>
+                            <th>{{ trans('blog::post.table.published-on') }}</th>
                             <th>{{ trans('blog::post.table.title') }}</th>
                             <th>{{ trans('blog::post.table.slug') }}</th>
+                            <th>{{ trans('blog::post.table.author') }}</th>
                             <th>{{ trans('core::core.table.created at') }}</th>
                             <th>{{ trans('core::core.table.actions') }}</th>
                         </tr>

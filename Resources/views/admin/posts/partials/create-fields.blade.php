@@ -10,9 +10,11 @@
        {!! $errors->first("$lang.slug", '<span class="help-block">:message</span>') !!}
     </div>
 
-    <textarea class="ckeditor" name="{{$lang}}[content]" rows="10" cols="80">
-        {!! old("{$lang}.content") !!}
-    </textarea>
+    <div class="form-group">
+        <textarea class="ckeditor" name="{{$lang}}[content]" rows="10" cols="80">
+            {!! old("{$lang}.content") !!}
+        </textarea>
+    </div>
 
     <div class='form-group{{ $errors->has("$lang.excerpt") ? ' has-error' : '' }}'>
         {!! Form::label("{$lang}[excerpt]", trans('blog::post.form.excerpt')) !!}

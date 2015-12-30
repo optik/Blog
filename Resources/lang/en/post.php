@@ -13,6 +13,8 @@ return [
         'title' => 'Title',
         'slug' => 'Slug',
         'status' => 'Status',
+        'author' => 'Author',
+        'published-on' => 'Publish date',
     ],
     'form' => [
         'title' => 'Title',
