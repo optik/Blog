@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdatePostsTable extends Migration {
+class UpdatePostsTableAddPublishedOnExcerpt extends Migration {
 
     /**
      * Run the migrations.
