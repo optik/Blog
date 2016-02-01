@@ -50,7 +50,7 @@ class PostsWidget extends BaseWidget
     {
         return [
             'width' => '2',
-            'height' => '2',
+            'height' => '1',
             'x' => '0',
         ];
     }
