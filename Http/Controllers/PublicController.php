@@ -51,18 +51,25 @@ class PublicController extends BasePublicController
 
     public function show($slug)
     {
-        $post = $this->post->findBySlug($slug);
+        $post = $this->getPostQuery($slug)->firstOrFail();
         $categories = $this->category->allTranslatedIn(App::getLocale());
 
         return view('blog.show', compact('post', 'categories'));
     }
 
-    private function getPostQuery() {
+    private function getPostQuery($slug = null) {
         $lang = App::getLocale();
-        return Post::whereHas('translations', function (Builder $q) use ($lang) {
+        return Post::whereHas('translations', function (Builder $q) use ($lang, $slug) {
             $q->where('locale', "$lang");
             $q->where('title', '!=', '');
-        })->with('translations')->whereStatus(Status::PUBLISHED)->orderBy('created_at', 'DESC');
+            if($slug) {
+                $q->where('slug', $slug);
+            }
+        })
+            ->with('translations')
+            ->with('files')
+            ->whereStatus(Status::PUBLISHED)
+            ->orderBy('created_at', 'DESC');
 
     }
 }

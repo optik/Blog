@@ -30,11 +30,19 @@ class SidebarExtender implements \Maatwebsite\Sidebar\SidebarExtender
     public function extendWith(Menu $menu)
     {
         $menu->group(trans('core::sidebar.content'), function (Group $group) {
+            $group->authorize(
+                $this->auth->hasAccess('blog.posts.index') ||
+                $this->auth->hasAccess('page.pages.index') ||
+                $this->auth->hasAccess('media.pages.index') ||
+                $this->auth->hasAccess('menu.menus.index') ||
+                $this->auth->hasAccess('translation.translations.index')
+            );
             $group->item(trans('blog::blog.title'), function (Item $item) {
-
+                $item->authorize(
+                    $this->auth->hasAccess('blog.posts.index')
+                );
                 $item->icon('fa fa-copy');
                 $item->weight(0);
-
                 $item->item(trans('blog::post.title.post'), function (Item $item) {
                     $item->icon('fa fa-copy');
                     $item->weight(0);

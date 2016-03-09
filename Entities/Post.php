@@ -77,4 +77,11 @@ class Post extends Model
     {
         return (bool) $query->whereStatus(3);
     }
+
+    public function getCoverAttribute() {
+        if(count($this->files)) {
+            return $this->files->first()->path;
+        }
+        return null;
+    }
 }
