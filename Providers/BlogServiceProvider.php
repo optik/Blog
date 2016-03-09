@@ -1,7 +1,5 @@
 <?php namespace Modules\Blog\Providers;
 
-use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Modules\Blog\Entities\Category;
 use Modules\Blog\Entities\Post;
@@ -9,9 +7,12 @@ use Modules\Blog\Entities\Tag;
 use Modules\Blog\Repositories\Cache\CacheCategoryDecorator;
 use Modules\Blog\Repositories\Cache\CachePostDecorator;
 use Modules\Blog\Repositories\Cache\CacheTagDecorator;
+use Modules\Blog\Repositories\CategoryRepository;
 use Modules\Blog\Repositories\Eloquent\EloquentCategoryRepository;
 use Modules\Blog\Repositories\Eloquent\EloquentPostRepository;
 use Modules\Blog\Repositories\Eloquent\EloquentTagRepository;
+use Modules\Blog\Repositories\PostRepository;
+use Modules\Blog\Repositories\TagRepository;
 
 class BlogServiceProvider extends ServiceProvider
 {
@@ -23,43 +24,19 @@ class BlogServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
-     * The filters base class name.
-     *
-     * @var array
-     */
-    protected $filters = [
-        'Core' => [
-            'permissions' => 'PermissionFilter',
-            'auth.admin' => 'AdminFilter',
-        ],
-    ];
-
-    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        $this->registerFilters($this->app['router']);
         $this->registerBindings();
     }
 
-    /**
-     * Register the filters.
-     *
-     * @param  Router $router
-     * @return void
-     */
-    public function registerFilters(Router $router)
+    public function boot()
     {
-        foreach ($this->filters as $module => $filters) {
-            foreach ($filters as $name => $filter) {
-                $class = "Modules\\{$module}\\Http\\Filters\\{$filter}";
-
-                $router->filter($name, $class);
-            }
-        }
+        $this->mergeConfigFrom(__DIR__ . '/../Config/config.php', 'asgard.blog.config');
+        $this->publishes([__DIR__ . '/../Config/config.php' => config_path('asgard.blog.config' . '.php'), ], 'config');
     }
 
     /**
@@ -74,12 +51,10 @@ class BlogServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
-        $this->app->bind(
-            'Modules\Blog\Repositories\PostRepository',
-            function () {
+        $this->app->bind(PostRepository::class, function () {
                 $repository = new EloquentPostRepository(new Post());
 
-                if (! Config::get('app.cache')) {
+                if (config('app.cache') === false) {
                     return $repository;
                 }
 
@@ -87,12 +62,10 @@ class BlogServiceProvider extends ServiceProvider
             }
         );
 
-        $this->app->bind(
-            'Modules\Blog\Repositories\CategoryRepository',
-            function () {
+        $this->app->bind(CategoryRepository::class, function () {
                 $repository = new EloquentCategoryRepository(new Category());
 
-                if (! Config::get('app.cache')) {
+                if (config('app.cache') === false) {
                     return $repository;
                 }
 
@@ -100,12 +73,10 @@ class BlogServiceProvider extends ServiceProvider
             }
         );
 
-        $this->app->bind(
-            'Modules\Blog\Repositories\TagRepository',
-            function () {
+        $this->app->bind(TagRepository::class, function () {
                 $repository = new EloquentTagRepository(new Tag());
 
-                if (! Config::get('app.cache')) {
+                if (config('app.cache') === false) {
                     return $repository;
                 }
 
