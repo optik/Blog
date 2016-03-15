@@ -13,7 +13,8 @@
     "widgets": [
         "Modules\\Blog\\Widgets\\PostsWidget",
         "Modules\\Blog\\Widgets\\CategoriesWidget",
-        "Modules\\Blog\\Widgets\\LatestPostsWidget"
+        "Modules\\Blog\\Widgets\\LatestPostsWidget",
+        "Modules\\Blog\\Widgets\\SystemPostsWidget"
     ],
     "files": [
         "composers.php"

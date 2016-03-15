@@ -15,6 +15,7 @@ $router->group(['prefix' => '/blog'], function () {
     get('posts', ['as' => 'admin.blog.post.index', 'uses' => 'PostController@index']);
     get('posts/create', ['as' => 'admin.blog.post.create', 'uses' => 'PostController@create']);
     post('posts', ['as' => 'admin.blog.post.store', 'uses' => 'PostController@store']);
+    get('posts/{post}/show', ['as' => 'admin.blog.post.show', 'uses' => 'PostController@show']);
     get('posts/{post}/edit', ['as' => 'admin.blog.post.edit', 'uses' => 'PostController@edit']);
     put('posts/{post}', ['as' => 'admin.blog.post.update', 'uses' => 'PostController@update']);
     delete('posts/{post}', ['as' => 'admin.blog.post.destroy', 'uses' => 'PostController@destroy']);

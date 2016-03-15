@@ -6,6 +6,7 @@ class StoreCategoryRequest extends FormRequest
 {
     public function rules()
     {
+        $this->merge(['on_backend' => $this->input('on_backend', 0)]);
         return [
            // 'slug[en]' => 'required'
         ];

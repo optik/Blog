@@ -8,6 +8,7 @@ return [
         'edit',
         'update',
         'destroy',
+        'show',
     ],
     'blog.categories' => [
         'index',

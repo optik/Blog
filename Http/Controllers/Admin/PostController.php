@@ -13,6 +13,8 @@ use Modules\Core\Contracts\Authentication;
 
 class PostController extends AdminBaseController
 {
+    use \Modules\Blog\Http\Controllers\BlogPostControllerTrait;
+
     /**
      * @var PostRepository
      */
@@ -66,6 +68,18 @@ class PostController extends AdminBaseController
         $posts = $this->post->all();
 
         return view('blog::admin.posts.index', compact('posts'));
+    }
+
+    /**
+     * Show the post
+     *
+     * @param Post $post
+     * @return \Illuminate\View\View
+     */
+    public function show(Post $post)
+    {
+        $thumbnail = $this->file->findFileByZoneForEntity('thumbnail', $post);
+        return view('blog::admin.posts.show', compact('post', 'thumbnail'));
     }
 
     /**

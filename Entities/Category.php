@@ -8,7 +8,7 @@ class Category extends Model
     use Translatable;
 
     public $translatedAttributes = ['name', 'slug'];
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'slug', 'on_backend'];
     protected $table = 'blog__categories';
 
     public function posts()

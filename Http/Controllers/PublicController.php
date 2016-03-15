@@ -4,13 +4,12 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Blog\Repositories\PostRepository;
 use Modules\Blog\Repositories\CategoryRepository;
-use Modules\Blog\Entities\Post;
-use Modules\Blog\Entities\Status;
 use Modules\Core\Http\Controllers\BasePublicController;
 use Setting;
 
 class PublicController extends BasePublicController
 {
+    use \Modules\Blog\Http\Controllers\BlogPostControllerTrait;
     /**
      * @var PostRepository
      */
@@ -55,21 +54,5 @@ class PublicController extends BasePublicController
         $categories = $this->category->allTranslatedIn(App::getLocale());
 
         return view('blog.show', compact('post', 'categories'));
-    }
-
-    private function getPostQuery($slug = null) {
-        $lang = App::getLocale();
-        return Post::whereHas('translations', function (Builder $q) use ($lang, $slug) {
-            $q->where('locale', "$lang");
-            $q->where('title', '!=', '');
-            if($slug) {
-                $q->where('slug', $slug);
-            }
-        })
-            ->with('translations')
-            ->with('files')
-            ->whereStatus(Status::PUBLISHED)
-            ->orderBy('created_at', 'DESC');
-
     }
 }

@@ -13,10 +13,12 @@ return [
         'created at' => 'Create at',
         'name' => 'Name',
         'slug' => 'Slug',
+        'on backend' => 'Backend category',
     ],
     'form' => [
         'name' => 'Name',
         'slug' => 'Slug',
+        'on backend' => 'Backend category',
     ],
     'navigation' => [
         'back to index' => 'Back to category index'

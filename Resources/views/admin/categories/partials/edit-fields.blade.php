@@ -11,4 +11,13 @@
            {!! Form::text("{$lang}[slug]", Input::old("{$lang}[slug]", $old), ['class' => 'form-control slug', 'data-slug' => 'target', 'placeholder' => trans('blog::category.form.slug')]) !!}
            {!! $errors->first("{$lang}[slug]", '<span class="help-block">:message</span>') !!}
        </div>
+   <div class="form-group{{ $errors->has('on_backend') ? ' has-error' : '' }}">
+      <div class="checkbox">
+         <label>
+            {!! Form::checkbox('on_backend', 1, old('on_backend', $category->on_backend)) !!}
+            {!! trans('blog::category.form.on backend') !!}
+         </label>
+      </div>
+      {!! $errors->first('on_backend', '<span class="help-block">:message</span>') !!}
+   </div>
 </div>

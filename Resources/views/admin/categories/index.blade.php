@@ -31,6 +31,7 @@
                             <th>Id</th>
                             <th>{{ trans('blog::category.table.name') }}</th>
                             <th>{{ trans('blog::category.table.slug') }}</th>
+                            <th>{{ trans('blog::category.table.on backend') }}</th>
                             <th>{{ trans('core::core.table.created at') }}</th>
                             <th data-sortable="false">{{ trans('core::core.table.actions') }}</th>
                         </tr>
@@ -55,6 +56,11 @@
                                     </a>
                                 </td>
                                 <td>
+                                    @if($category->on_backend)
+                                    <i class="fa fa-check"></i>
+                                    @endif
+                                </td>
+                                <td>
                                     <a href="{{ route('admin.blog.category.edit', [$category->id]) }}">
                                         {{ $category->created_at }}
                                     </a>
@@ -74,6 +80,7 @@
                             <th>Id</th>
                             <th>{{ trans('blog::category.table.name') }}</th>
                             <th>{{ trans('blog::category.table.slug') }}</th>
+                            <th>{{ trans('blog::category.table.on backend') }}</th>
                             <th>{{ trans('core::core.table.created at') }}</th>
                             <th>{{ trans('core::core.table.actions') }}</th>
                         </tr>
